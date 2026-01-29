@@ -44,8 +44,19 @@ router.get("/name/:name", function (req: Request, res: Response, next: NextFunct
 
 /* GET Pokemon by Type */
 router.get("/type/:type", function (req: Request, res: Response, next: NextFunction): void {
-  // TODO: Implement this route. See swagger docs for details, by visiting http://localhost:3000/api-docs
-  res.status(501).json({ message: "Not Implemented" });
+  const validTypes = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
+
+  const type = String(req.params.type).toLowerCase();
+  const isValidType = validTypes.includes(type);
+
+  if (!isValidType){
+    res.status(400).json({ error: "Bad Request" });
+    return;
+  }
+
+  const pokeMatch = pokedex.filter(p => p.type.some(t => t.toLowerCase() === type));
+
+  res.status(200).json(pokeMatch);
   return;
 });
 
