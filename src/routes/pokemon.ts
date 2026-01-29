@@ -10,8 +10,21 @@ router.get("/", function (req: Request, res: Response, next: NextFunction): void
 
 /* GET Pokemon by Id. */
 router.get("/:id", function (req: Request, res: Response, next: NextFunction): void {
-  // TODO: Implement this route. See swagger docs for details, by visiting http://localhost:3000/api-docs
-  res.status(501).json({ message: "Not Implemented" });
+  const id = Number(req.params.id);
+
+  if (isNaN(id)){
+    res.status(400).json({ error: "Invalid ID" });
+    return;
+  }
+
+  const pokemon = pokedex.find(p => p.id === id);
+
+  if (!pokemon){
+    res.status(404).json({ error: "Not found" });
+    return;
+  }
+
+  res.status(200).json(pokemon);
   return;
 });
 
